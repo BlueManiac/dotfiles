@@ -10,3 +10,11 @@ sudo pacman -S --noconfirm libgtop lm_sensors
 paru -S --noconfirm gnome-shell-extension-vitals
 gnome-extensions enable Vitals@CoreCoding.com
 sudo sensors-detect
+
+# Brave browser
+echo "Installing Brave browser..."
+paru -S --noconfirm brave-bin
+
+# Visual Studio Code
+echo "Installing Visual Studio Code..."
+paru -S --noconfirm visual-studio-code-bin

@@ -17,3 +17,5 @@ chmod +x install.sh
   - `libgtop`, `lm_sensors` via pacman
   - `gnome-shell-extension-vitals` via paru (AUR)
   - Runs `sensors-detect` interactively to configure hardware sensor detection
+- **Brave** – privacy-focused web browser (`brave-bin` via paru)
+- **Visual Studio Code** – code editor (`visual-studio-code-bin` via paru)
