@@ -8,8 +8,8 @@ set -euo pipefail
 echo "Installing Vitals GNOME extension..."
 sudo pacman -S --noconfirm libgtop lm_sensors
 paru -S --noconfirm gnome-shell-extension-vitals
+# Restart needed here
 gnome-extensions enable Vitals@CoreCoding.com
-sudo sensors-detect
 
 # Brave browser
 echo "Installing Brave browser..."
