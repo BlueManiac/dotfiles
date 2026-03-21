@@ -11,6 +11,11 @@ main() {
 	echo "Installing Visual Studio Code..."
 	paru -S --noconfirm visual-studio-code-bin
 
+	# Git global identity
+	echo "Configuring Git global identity..."
+	git config --global user.name "BlueManiac"
+	git config --global user.email "bluemaniac@users.noreply.github.com"
+
     # Gnome settings
 	if [ "$desktop" = "gnome" ]; then
         echo "Installing Vitals GNOME extension..."
