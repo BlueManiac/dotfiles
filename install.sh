@@ -1,20 +1,37 @@
 #!/bin/bash
 
+main() {
+	desktop="$(get_desktop)"
+
+	# Brave browser
+	echo "Installing Brave browser..."
+	paru -S --noconfirm brave-bin
+
+	# Visual Studio Code
+	echo "Installing Visual Studio Code..."
+	paru -S --noconfirm visual-studio-code-bin
+
+    # Gnome settings
+	if [ "$desktop" = "gnome" ]; then
+        echo "Installing Vitals GNOME extension..."
+        sudo pacman -S --noconfirm libgtop lm_sensors
+        paru -S --noconfirm gnome-shell-extension-vitals
+        # Restart needed here
+        gnome-extensions enable Vitals@CoreCoding.com
+
+        # Keyboard shortcuts
+        echo "Setting up GNOME keyboard shortcuts..."
+        gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+	fi
+}
+
+get_desktop() {
+	local raw_current_desktop="${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-}}"
+	local current_desktop="${raw_current_desktop%%:*}"
+	current_desktop="${current_desktop,,}"
+
+	printf '%s\n' "${current_desktop:-unknown}"
+}
+
 set -euo pipefail
-
-# Install script for CachyOS applications
-
-# Vitals GNOME extension
-echo "Installing Vitals GNOME extension..."
-sudo pacman -S --noconfirm libgtop lm_sensors
-paru -S --noconfirm gnome-shell-extension-vitals
-# Restart needed here
-gnome-extensions enable Vitals@CoreCoding.com
-
-# Brave browser
-echo "Installing Brave browser..."
-paru -S --noconfirm brave-bin
-
-# Visual Studio Code
-echo "Installing Visual Studio Code..."
-paru -S --noconfirm visual-studio-code-bin
+main "$@"
