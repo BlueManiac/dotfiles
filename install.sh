@@ -13,6 +13,14 @@ main() {
 	echo "Installing Visual Studio Code..."
 	sudo paru -S --needed --noconfirm visual-studio-code-bin
 
+	# .NET
+	echo "Installing .NET SDK..."
+	sudo paru -S --needed --noconfirm dotnet-sdk
+
+	# Node.js
+	echo "Installing Node.js..."
+	sudo paru -S --needed --noconfirm nodejs npm
+
 	# Git global identity
 	echo "Configuring Git global identity..."
 	git config --global user.name "BlueManiac"
