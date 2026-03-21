@@ -81,6 +81,15 @@ main() {
 		# Keyboard shortcuts
 		echo "Setting up GNOME keyboard shortcuts..."
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+
+		# Nautilus context menu - Open with Code
+		echo "Setting up Nautilus context menu - Open with Code..."
+		mkdir -p "$HOME/.local/share/nautilus/scripts"
+		cat > "$HOME/.local/share/nautilus/scripts/Open with Code" << 'EOF'
+#!/bin/bash
+code "$1"
+EOF
+		chmod +x "$HOME/.local/share/nautilus/scripts/Open with Code"
 	fi
 }
 
