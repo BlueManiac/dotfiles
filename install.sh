@@ -34,6 +34,30 @@ main() {
 	echo "Configuring shell aliases..."
 	ensure_line_in_file "$HOME/.bashrc" "alias cls='clear'"
 
+	# Data disk auto-mount
+	echo "Configuring Data disk auto-mount..."
+	if mountpoint -q "/run/media/$USER/Data" 2>/dev/null; then
+		local data_device data_uuid data_mount
+		data_device=$(findmnt -n -o SOURCE "/run/media/$USER/Data")
+		data_uuid=$(sudo blkid -s UUID -o value "$data_device")
+		data_mount="/run/media/$USER/Data"
+		sudo mkdir -p "$data_mount"
+		if ! sudo grep -q "^UUID=$data_uuid" /etc/fstab; then
+			echo "UUID=$data_uuid $data_mount ext4 defaults,nofail 0 2" | sudo tee -a /etc/fstab > /dev/null
+		fi
+	fi
+
+	# Projects symlink
+	echo "Setting up Projects symlink..."
+	ln -sfn "/run/media/$USER/Data/Projects" "$HOME/Projects"
+
+	# VS Code default shell
+	echo "Configuring VS Code default shell..."
+	ensure_json_key_value \
+		"$HOME/.config/Code/User/settings.json" \
+		"terminal.integrated.defaultProfile.linux" \
+		"bash"
+
 	# Alacritty configuration
 	if command -v alacritty &> /dev/null; then
 		echo "Configuring Alacritty..."
@@ -103,6 +127,25 @@ ensure_line_in_file() {
 	else
 		printf '%s\n' "$line" >> "$file_path"
 	fi
+}
+
+ensure_json_key_value() {
+	local file_path="$1"
+	local json_key="$2"
+	local json_value="$3"
+
+	if ! command -v jq &> /dev/null; then
+		echo "jq is required to edit JSON files" >&2
+		return 1
+	fi
+
+	mkdir -p "$(dirname "$file_path")"
+	[ -f "$file_path" ] || echo '{}' > "$file_path"
+
+	local tmp_file
+	tmp_file="$(mktemp)"
+	jq --arg key "$json_key" --arg value "$json_value" '.[$key] = $value' "$file_path" > "$tmp_file"
+	mv "$tmp_file" "$file_path"
 }
 
 set -euo pipefail
