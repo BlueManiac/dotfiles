@@ -1,15 +1,17 @@
 #!/bin/bash
 
 main() {
-	desktop="$(get_desktop)"
+	# Update packages
+	echo "Updating packages..."
+	sudo paru -Syu --noconfirm
 
 	# Brave browser
 	echo "Installing Brave browser..."
-	paru -S --noconfirm brave-bin
+	sudo paru -S --needed --noconfirm brave-bin
 
 	# Visual Studio Code
 	echo "Installing Visual Studio Code..."
-	paru -S --noconfirm visual-studio-code-bin
+	sudo paru -S --needed --noconfirm visual-studio-code-bin
 
 	# Git global identity
 	echo "Configuring Git global identity..."
@@ -19,18 +21,20 @@ main() {
 	# Bash aliases
 	echo "Configuring shell aliases..."
 	ensure_line_in_file "$HOME/.bashrc" "alias cls='clear'"
+	
+	desktop="$(get_desktop)"
 
-    # Gnome settings
+	# GNOME settings
 	if [ "$desktop" = "gnome" ]; then
-        echo "Installing Vitals GNOME extension..."
-        sudo pacman -S --noconfirm libgtop lm_sensors
-        paru -S --noconfirm gnome-shell-extension-vitals
-        # Restart needed here
-        gnome-extensions enable Vitals@CoreCoding.com
+		echo "Installing Vitals GNOME extension..."
+		sudo pacman -S --needed --noconfirm libgtop lm_sensors
+		sudo paru -S --needed --noconfirm gnome-shell-extension-vitals
+		# Restart needed here
+		gnome-extensions enable Vitals@CoreCoding.com
 
-        # Keyboard shortcuts
-        echo "Setting up GNOME keyboard shortcuts..."
-        gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+		# Keyboard shortcuts
+		echo "Setting up GNOME keyboard shortcuts..."
+		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
 	fi
 }
 
