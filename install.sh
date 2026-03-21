@@ -21,6 +21,10 @@ main() {
 	echo "Installing Node.js..."
 	sudo paru -S --needed --noconfirm nodejs npm
 
+	# Codex CLI
+	echo "Installing Codex CLI..."
+	sudo npm install -g @openai/codex@latest
+
 	# Git global identity
 	echo "Configuring Git global identity..."
 	git config --global user.name "BlueManiac"
@@ -29,6 +33,16 @@ main() {
 	# Bash aliases
 	echo "Configuring shell aliases..."
 	ensure_line_in_file "$HOME/.bashrc" "alias cls='clear'"
+
+	# Alacritty configuration
+	if command -v alacritty &> /dev/null; then
+		echo "Configuring Alacritty..."
+		ensure_line_in_file \
+			"$HOME/.config/alacritty/alacritty.toml" \
+			"shell.program = \"/bin/bash\"" \
+			"^\s*shell\.program\s*=" \
+			"[terminal]"
+	fi
 	
 	desktop="$(get_desktop)"
 
@@ -55,12 +69,38 @@ get_desktop() {
 }
 
 ensure_line_in_file() {
+	# File to edit (creates if missing)
 	local file_path="$1"
+	# Line content to add/replace
 	local line="$2"
+	# (optional) regex to match for replacement
+	local pattern="${3:-}"
+	# (optional) line to insert after (creates if missing)
+	local marker="${4:-}"
 
+	mkdir -p "$(dirname "$file_path")"
 	touch "$file_path"
 
-	if ! grep -Fqx "$line" "$file_path"; then
+	# Replace if pattern matches
+	if [ -n "$pattern" ] && grep -qE "$pattern" "$file_path"; then
+		sed -i "s|$pattern.*|$line|" "$file_path"
+		return
+	fi
+
+	# Don't add if line already exists
+	if grep -Fqx "$line" "$file_path"; then
+		return
+	fi
+
+	# Ensure marker exists if specified
+	if [ -n "$marker" ] && ! grep -Fqx "$marker" "$file_path"; then
+		printf '%s\n' "$marker" >> "$file_path"
+	fi
+
+	# Add line after marker or at end
+	if [ -n "$marker" ]; then
+		sed -i "/$(sed 's/[&/\[\]]/\\&/g' <<< "$marker")/a $line" "$file_path"
+	else
 		printf '%s\n' "$line" >> "$file_path"
 	fi
 }
