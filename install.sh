@@ -16,6 +16,10 @@ main() {
 	git config --global user.name "BlueManiac"
 	git config --global user.email "bluemaniac@users.noreply.github.com"
 
+	# Bash aliases
+	echo "Configuring shell aliases..."
+	ensure_line_in_file "$HOME/.bashrc" "alias cls='clear'"
+
     # Gnome settings
 	if [ "$desktop" = "gnome" ]; then
         echo "Installing Vitals GNOME extension..."
@@ -36,6 +40,17 @@ get_desktop() {
 	current_desktop="${current_desktop,,}"
 
 	printf '%s\n' "${current_desktop:-unknown}"
+}
+
+ensure_line_in_file() {
+	local file_path="$1"
+	local line="$2"
+
+	touch "$file_path"
+
+	if ! grep -Fqx "$line" "$file_path"; then
+		printf '%s\n' "$line" >> "$file_path"
+	fi
 }
 
 set -euo pipefail
