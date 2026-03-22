@@ -13,6 +13,10 @@ main() {
 	echo "Installing Visual Studio Code..."
 	sudo paru -S --needed --noconfirm visual-studio-code-bin
 
+	# OnlyOffice
+	echo "Installing OnlyOffice..."
+	sudo paru -S --needed --noconfirm onlyoffice-bin
+
 	# .NET
 	echo "Installing .NET SDK..."
 	sudo paru -S --needed --noconfirm dotnet-sdk
