@@ -124,6 +124,7 @@ main() {
 
 		# Focus follows mouse (hover to focus, keeps focus over empty space)
 		gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
+		gsettings set org.gnome.mutter focus-change-on-pointer-rest false
 
 		# Clear conflicts with <Super>w
 		gsettings set org.gnome.shell.extensions.forge.keybindings prefs-tiling-toggle "[]"
