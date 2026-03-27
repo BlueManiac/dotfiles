@@ -122,6 +122,9 @@ main() {
 		# Other shortcuts
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
 
+		# Focus follows mouse (hover to focus, keeps focus over empty space)
+		gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
+
 		# Clear conflicts with <Super>w
 		gsettings set org.gnome.shell.extensions.forge.keybindings prefs-tiling-toggle "[]"
 
