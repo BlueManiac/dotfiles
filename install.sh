@@ -83,13 +83,13 @@ main() {
 			"shell.program = \"/bin/bash\"" \
 			"^\s*shell\.program\s*=" \
 			"[terminal]"
-	fi
+	fiEWW
 	
 	# ===== Desktop-specific configuration =====
 
 	desktop="$(get_desktop)"
 
-	# GNOME settings
+	# GNOME settingsWWWQQWQW
 	if [ "$desktop" = "gnome" ]; then
 		echo "Installing Vitals GNOME extension..."
 		sudo pacman -S --needed --noconfirm libgtop lm_sensors
@@ -99,6 +99,13 @@ main() {
 
 		echo "Setting up GNOME keyboard shortcuts..."
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+
+		echo "Setting up GNOME workspace shortcuts..."
+		for workspace in {1..9}; do
+			gsettings set org.gnome.shell.keybindings "switch-to-application-$workspace" "[]"
+			gsettings set org.gnome.desktop.wm.keybindings "switch-to-workspace-$workspace" "['<Super>$workspace']"
+			gsettings set org.gnome.desktop.wm.keybindings "move-to-workspace-$workspace" "['<Super><Shift>$workspace']"
+		done
 
 		echo "Setting GNOME text scaling factor..."
 		gsettings set org.gnome.desktop.interface text-scaling-factor 1.03
