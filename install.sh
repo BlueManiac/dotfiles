@@ -3,41 +3,32 @@
 main() {
 	# ===== System update =====
 
-	# Update packages
 	echo "Updating packages..."
 	sudo paru -Syu --noconfirm
 
 	# ===== Applications =====
 	
-	# Brave browser
 	echo "Installing Brave browser..."
 	sudo paru -S --needed --noconfirm brave-bin
 
-	# Etcher
 	echo "Installing Etcher..."
 	sudo paru -S --needed --noconfirm etcher-bin
 
-	# LM Studio
 	echo "Installing LM Studio..."
 	paru -S --needed --noconfirm lmstudio-bin
 
-	# .NET
 	echo "Installing .NET SDK..."
 	sudo paru -S --needed --noconfirm dotnet-sdk
 
-	# Node.js
 	echo "Installing Node.js..."
 	sudo paru -S --needed --noconfirm nodejs npm
 
-	# Ollama
 	echo "Installing Ollama..."
 	sudo paru -S --needed --noconfirm ollama
 
-	# OnlyOffice
 	echo "Installing OnlyOffice..."
 	paru -S --needed --noconfirm onlyoffice-bin
 
-	# Visual Studio Code
 	echo "Installing Visual Studio Code..."
 	paru -S --needed --noconfirm visual-studio-code-bin
 
@@ -48,6 +39,7 @@ main() {
 	sudo npm install -g @openai/codex@latest
 
 	# ===== Git and shell configuration =====
+
 	# Git global identity
 	echo "Configuring Git global identity..."
 	git config --global user.name "BlueManiac"
@@ -75,6 +67,7 @@ main() {
 	ln -sfn "/run/media/$USER/Data/Projects" "$HOME/Projects"
 
 	# ===== Editor and terminal configuration =====
+
 	# VS Code default shell
 	echo "Configuring VS Code default shell..."
 	ensure_json_key_value \
@@ -93,6 +86,7 @@ main() {
 	fi
 	
 	# ===== Desktop-specific configuration =====
+
 	desktop="$(get_desktop)"
 
 	# GNOME settings
@@ -103,14 +97,12 @@ main() {
 		# Restart needed here
 		gnome-extensions enable Vitals@CoreCoding.com
 
-		# Keyboard shortcuts
 		echo "Setting up GNOME keyboard shortcuts..."
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
 
 		echo "Setting GNOME text scaling factor..."
 		gsettings set org.gnome.desktop.interface text-scaling-factor 1.03
 
-		# Nautilus context menu - Open with Code
 		echo "Setting up Nautilus context menu - Open with Code..."
 		mkdir -p "$HOME/.local/share/nautilus/scripts"
 		cat > "$HOME/.local/share/nautilus/scripts/Open with Code" << 'EOF'
