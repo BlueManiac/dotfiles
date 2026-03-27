@@ -1,21 +1,25 @@
 #!/bin/bash
 
 main() {
+	# ===== System update =====
+
 	# Update packages
 	echo "Updating packages..."
 	sudo paru -Syu --noconfirm
 
+	# ===== Applications =====
+	
 	# Brave browser
 	echo "Installing Brave browser..."
 	sudo paru -S --needed --noconfirm brave-bin
 
-	# Visual Studio Code
-	echo "Installing Visual Studio Code..."
-	paru -S --needed --noconfirm visual-studio-code-bin
+	# Etcher
+	echo "Installing Etcher..."
+	sudo paru -S --needed --noconfirm etcher-bin
 
-	# OnlyOffice
-	echo "Installing OnlyOffice..."
-	paru -S --needed --noconfirm onlyoffice-bin
+	# LM Studio
+	echo "Installing LM Studio..."
+	paru -S --needed --noconfirm lmstudio-bin
 
 	# .NET
 	echo "Installing .NET SDK..."
@@ -25,10 +29,25 @@ main() {
 	echo "Installing Node.js..."
 	sudo paru -S --needed --noconfirm nodejs npm
 
+	# Ollama
+	echo "Installing Ollama..."
+	sudo paru -S --needed --noconfirm ollama
+
+	# OnlyOffice
+	echo "Installing OnlyOffice..."
+	paru -S --needed --noconfirm onlyoffice-bin
+
+	# Visual Studio Code
+	echo "Installing Visual Studio Code..."
+	paru -S --needed --noconfirm visual-studio-code-bin
+
+	# ===== CLI tooling =====
+	
 	# Codex CLI
 	echo "Installing Codex CLI..."
 	sudo npm install -g @openai/codex@latest
 
+	# ===== Git and shell configuration =====
 	# Git global identity
 	echo "Configuring Git global identity..."
 	git config --global user.name "BlueManiac"
@@ -55,6 +74,7 @@ main() {
 	echo "Setting up Projects symlink..."
 	ln -sfn "/run/media/$USER/Data/Projects" "$HOME/Projects"
 
+	# ===== Editor and terminal configuration =====
 	# VS Code default shell
 	echo "Configuring VS Code default shell..."
 	ensure_json_key_value \
@@ -72,6 +92,7 @@ main() {
 			"[terminal]"
 	fi
 	
+	# ===== Desktop-specific configuration =====
 	desktop="$(get_desktop)"
 
 	# GNOME settings
