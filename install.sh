@@ -166,6 +166,10 @@ main() {
 			gsettings set org.gnome.desktop.wm.keybindings "switch-to-workspace-$workspace" "['<Super>$workspace']"
 			gsettings set org.gnome.desktop.wm.keybindings "move-to-workspace-$workspace" "['<Super><Shift>$workspace']"
 		done
+		
+		echo "Configuring GNOME workspaces..."
+		gsettings set org.gnome.mutter dynamic-workspaces false
+		gsettings set org.gnome.desktop.wm.preferences num-workspaces 4
 
 		echo "Setting GNOME text scaling factor..."
 		gsettings set org.gnome.desktop.interface text-scaling-factor 1.03
