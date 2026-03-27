@@ -11,14 +11,17 @@ main() {
 	echo "Installing Brave browser..."
 	sudo paru -S --needed --noconfirm brave-bin
 
+	echo "Installing .NET SDK..."
+	sudo paru -S --needed --noconfirm dotnet-sdk
+
+	echo "Installing CachyOS gaming meta package..."
+	sudo paru -S --needed --noconfirm cachyos-gaming-meta
+
 	echo "Installing Etcher..."
 	sudo paru -S --needed --noconfirm etcher-bin
 
 	echo "Installing LM Studio..."
 	paru -S --needed --noconfirm lmstudio-bin
-
-	echo "Installing .NET SDK..."
-	sudo paru -S --needed --noconfirm dotnet-sdk
 
 	echo "Installing Node.js..."
 	sudo paru -S --needed --noconfirm nodejs npm
@@ -29,6 +32,9 @@ main() {
 
 	echo "Installing OnlyOffice..."
 	paru -S --needed --noconfirm onlyoffice-bin
+
+	echo "Installing Steam..."
+	sudo paru -S --needed --noconfirm steam
 
 	echo "Installing Visual Studio Code..."
 	paru -S --needed --noconfirm visual-studio-code-bin
