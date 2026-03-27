@@ -42,7 +42,7 @@ main() {
 	paru -S --needed --noconfirm visual-studio-code-bin
 
 	# ===== CLI tooling =====
-	
+
 	# Codex CLI
 	echo "Installing Codex CLI..."
 	sudo npm install -g @openai/codex@latest
@@ -106,6 +106,9 @@ main() {
 		# Keyboard shortcuts
 		echo "Setting up GNOME keyboard shortcuts..."
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+
+		echo "Setting GNOME text scaling factor..."
+		gsettings set org.gnome.desktop.interface text-scaling-factor 1.03
 
 		# Nautilus context menu - Open with Code
 		echo "Setting up Nautilus context menu - Open with Code..."
