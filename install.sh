@@ -49,6 +49,11 @@ main() {
 	echo "Configuring shell aliases..."
 	ensure_line_in_file "$HOME/.bashrc" "alias cls='clear'"
 
+	# Disable bracketed paste (prevents ^[[200~ artifacts when pasting)
+	echo "Disabling bracketed paste..."
+	ensure_line_in_file "$HOME/.inputrc" "set enable-bracketed-paste off"
+	bind -f ~/.inputrc
+
 	# Data disk auto-mount
 	echo "Configuring Data disk auto-mount..."
 	if mountpoint -q "/run/media/$USER/Data" 2>/dev/null; then
