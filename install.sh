@@ -25,6 +25,7 @@ main() {
 
 	echo "Installing Ollama..."
 	sudo paru -S --needed --noconfirm ollama
+	sudo systemctl enable --now ollama
 
 	echo "Installing OnlyOffice..."
 	paru -S --needed --noconfirm onlyoffice-bin
