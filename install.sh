@@ -52,10 +52,9 @@ main() {
 	# Data disk auto-mount
 	echo "Configuring Data disk auto-mount..."
 	if mountpoint -q "/run/media/$USER/Data" 2>/dev/null; then
-		local data_device data_uuid data_mount
-		data_device=$(findmnt -n -o SOURCE "/run/media/$USER/Data")
-		data_uuid=$(sudo blkid -s UUID -o value "$data_device")
-		data_mount="/run/media/$USER/Data"
+		local data_device=$(findmnt -n -o SOURCE "/run/media/$USER/Data")
+		local data_uuid=$(sudo blkid -s UUID -o value "$data_device")
+		local data_mount="/run/media/$USER/Data"
 		sudo mkdir -p "$data_mount"
 		if ! sudo grep -q "^UUID=$data_uuid" /etc/fstab; then
 			echo "UUID=$data_uuid $data_mount ext4 defaults,nofail 0 2" | sudo tee -a /etc/fstab > /dev/null
@@ -83,22 +82,67 @@ main() {
 			"shell.program = \"/bin/bash\"" \
 			"^\s*shell\.program\s*=" \
 			"[terminal]"
-	fiEWW
+	fi
 	
 	# ===== Desktop-specific configuration =====
 
 	desktop="$(get_desktop)"
 
-	# GNOME settingsWWWQQWQW
+	# GNOME settings
 	if [ "$desktop" = "gnome" ]; then
-		echo "Installing Vitals GNOME extension..."
+		echo "Installing GNOME extensions..."
 		sudo pacman -S --needed --noconfirm libgtop lm_sensors
-		sudo paru -S --needed --noconfirm gnome-shell-extension-vitals
-		# Restart needed here
-		gnome-extensions enable Vitals@CoreCoding.com
+		paru -S --needed --noconfirm gnome-shell-extension-vitals gnome-shell-extension-forge
+		local extensions=("Vitals@CoreCoding.com" "forge@jmmaranan.com")
+		local enabled="$(gsettings get org.gnome.shell enabled-extensions)"
+		for ext in "${extensions[@]}"; do
+			if [[ "$enabled" != *"$ext"* ]]; then
+				echo "Enabling $ext..."
+				if [[ "$enabled" == "@as []" ]]; then
+					enabled="['$ext']"
+				else
+					enabled="${enabled/%]/, \'$ext\']}"
+				fi
+			fi
+		done
+		gsettings set org.gnome.shell enabled-extensions "$enabled"
 
 		echo "Setting up GNOME keyboard shortcuts..."
+
+		# Move windows between monitors (clears conflicting tiling defaults)
+		gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-left "['<Super>Left']"
+		gsettings set org.gnome.desktop.wm.keybindings move-to-monitor-right "['<Super>Right']"
+		gsettings set org.gnome.mutter.keybindings toggle-tiled-left "[]"
+		gsettings set org.gnome.mutter.keybindings toggle-tiled-right "[]"
+
+		# Close window (clears conflicting Forge focus-border-toggle)
+		gsettings set org.gnome.desktop.wm.keybindings close "['<Super>x']"
+		gsettings set org.gnome.shell.extensions.forge.keybindings focus-border-toggle "[]"
+
+		# Other shortcuts
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+
+		# Clear conflicts with <Super>w
+		gsettings set org.gnome.shell.extensions.forge.keybindings prefs-tiling-toggle "[]"
+
+		echo "Setting up GNOME custom keybindings..."
+		local kb_path="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+		local kb_schema="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
+		local custom_bindings=(
+			"Alacritty|alacritty|<Super>q"
+			"File Manager|nautilus|<Super>e"
+			"Brave|brave|<Super>w"
+		)
+
+		local kb_list=$(printf "'$kb_path/custom%s/', " "${!custom_bindings[@]}")
+		gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[${kb_list%, }]"
+
+		for i in "${!custom_bindings[@]}"; do
+			IFS='|' read -r name command binding <<< "${custom_bindings[$i]}"
+			gsettings set "$kb_schema:$kb_path/custom$i/" name "$name"
+			gsettings set "$kb_schema:$kb_path/custom$i/" command "$command"
+			gsettings set "$kb_schema:$kb_path/custom$i/" binding "$binding"
+		done
 
 		echo "Setting up GNOME workspace shortcuts..."
 		for workspace in {1..9}; do
