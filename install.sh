@@ -26,6 +26,9 @@ main() {
 	echo "Installing Node.js..."
 	sudo paru -S --needed --noconfirm nodejs npm
 
+	echo "Installing Python..."
+	sudo paru -S --needed --noconfirm python
+
 	echo "Installing Ollama..."
 	sudo paru -S --needed --noconfirm ollama
 	sudo systemctl enable --now ollama
@@ -40,6 +43,9 @@ main() {
 	paru -S --needed --noconfirm visual-studio-code-bin
 
 	# ===== CLI tooling =====
+
+	echo "Installing uv..."
+	sudo paru -S --needed --noconfirm uv
 
 	# Codex CLI
 	echo "Installing Codex CLI..."
