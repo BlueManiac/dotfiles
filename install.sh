@@ -130,6 +130,7 @@ main() {
 		# Close window (clears conflicting Forge focus-border-toggle)
 		gsettings set org.gnome.desktop.wm.keybindings close "['<Super>x']"
 		gsettings set org.gnome.shell.extensions.forge.keybindings focus-border-toggle "[]"
+		gsettings set org.gnome.shell.extensions.forge.keybindings window-toggle-float "[]"
 
 		# Other shortcuts
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
@@ -148,6 +149,7 @@ main() {
 		local custom_bindings=(
 			"Alacritty|alacritty|<Super>q"
 			"File Manager|nautilus|<Super>e"
+			"VS Code|code|<Super>c"
 			"Brave|brave|<Super>w"
 		)
 
