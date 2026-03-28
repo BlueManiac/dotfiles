@@ -22,6 +22,16 @@ main() {
 
 	echo "Installing LM Studio..."
 	paru -S --needed --noconfirm lmstudio-bin
+	mkdir -p "$HOME/.local/share/applications"
+	cat > "$HOME/.local/share/applications/lmstudio.desktop" << 'EOF'
+[Desktop Entry]
+Name=LM Studio
+Exec=lm-studio %U
+Icon=lmstudio-bin
+Type=Application
+MimeType=x-scheme-handler/lmstudio;
+EOF
+	xdg-mime default lmstudio.desktop x-scheme-handler/lmstudio || true
 
 	echo "Installing Node.js..."
 	sudo paru -S --needed --noconfirm nodejs npm
