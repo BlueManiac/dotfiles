@@ -62,20 +62,8 @@ main() {
 	bind -f ~/.inputrc
 
 	# Data disk auto-mount
-	echo "Configuring Data disk auto-mount..."
-	if mountpoint -q "/run/media/$USER/Data" 2>/dev/null; then
-		local data_device=$(findmnt -n -o SOURCE "/run/media/$USER/Data")
-		local data_uuid=$(sudo blkid -s UUID -o value "$data_device")
-		local data_mount="/run/media/$USER/Data"
-		sudo mkdir -p "$data_mount"
-		if ! sudo grep -q "^UUID=$data_uuid" /etc/fstab; then
-			echo "UUID=$data_uuid $data_mount ext4 defaults,nofail 0 2" | sudo tee -a /etc/fstab > /dev/null
-		fi
-	fi
-
-	# Projects symlink
-	echo "Setting up Projects symlink..."
-	ln -sfn "/run/media/$USER/Data/Projects" "$HOME/Projects"
+	configure_disk_mount "Data" "/mnt/Data"
+	configure_disk_mount "Files" "/mnt/Files"
 
 	# ===== Editor and terminal configuration =====
 
@@ -193,6 +181,69 @@ get_desktop() {
 	current_desktop="${current_desktop,,}"
 
 	printf '%s\n' "${current_desktop:-unknown}"
+}
+
+configure_disk_mount() {
+	local disk_label="$1"
+	local mount_point="$2"
+	local disk_device
+
+	echo "Configuring $disk_label disk auto-mount..."
+	disk_device="$(findfs "LABEL=$disk_label" 2>/dev/null || true)"
+	if [ -z "$disk_device" ]; then
+		echo "Skipping $disk_label disk fstab entry: could not find disk labeled $disk_label." >&2
+		return
+	fi
+
+	local disk_uuid="$(sudo blkid -s UUID -o value "$disk_device")"
+	local disk_fs_type="$(sudo blkid -s TYPE -o value "$disk_device")"
+	if [ -z "$disk_uuid" ] || [ -z "$disk_fs_type" ]; then
+		echo "Skipping $disk_label disk fstab entry: could not detect UUID or filesystem type." >&2
+		return
+	fi
+
+	local fstab_fs_type="$disk_fs_type"
+	local mount_options="defaults,nofail,x-gvfs-show,x-gvfs-name=$disk_label"
+	local passno="0"
+
+	case "$disk_fs_type" in
+		ntfs|ntfs3|ntfs-3g)
+			fstab_fs_type="ntfs3"
+			mount_options="uid=$(id -u),gid=$(id -g),umask=022,nofail,x-gvfs-show,x-gvfs-name=$disk_label"
+			;;
+		ext2|ext3|ext4)
+			passno="2"
+			;;
+	esac
+
+	sudo mkdir -p "$mount_point"
+	ensure_fstab_mount "$disk_uuid" "$mount_point" "$fstab_fs_type" "$mount_options" "$passno"
+	if ! mountpoint -q "$mount_point" 2>/dev/null; then
+		sudo mount "$mount_point" 2>/dev/null || true
+	fi
+}
+
+ensure_fstab_mount() {
+	local uuid="$1"
+	local mount_point="$2"
+	local fs_type="$3"
+	local mount_options="$4"
+	local passno="$5"
+	local entry="UUID=$uuid $mount_point $fs_type $mount_options 0 $passno"
+	local tmp_file
+
+	tmp_file="$(mktemp)"
+	if awk -v uuid="$uuid" -v entry="$entry" '
+		BEGIN { updated = 0 }
+		$1 == "UUID=" uuid { print entry; updated = 1; next }
+		{ print }
+		END { if (!updated) print entry }
+	' /etc/fstab > "$tmp_file"; then
+		sudo mv "$tmp_file" /etc/fstab
+	else
+		rm -f "$tmp_file"
+		return 1
+	fi
 }
 
 ensure_line_in_file() {
