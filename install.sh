@@ -133,6 +133,7 @@ main() {
 
 		# Other shortcuts
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
+		gsettings set org.gnome.shell.keybindings show-screenshot-ui "['Print', '<Shift><Super>s']"
 
 		# Focus follows mouse (hover to focus, keeps focus over empty space)
 		gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
