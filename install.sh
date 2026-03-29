@@ -134,6 +134,7 @@ EOF
 		# Close window (clears conflicting Forge focus-border-toggle)
 		gsettings set org.gnome.desktop.wm.keybindings close "['<Super>x']"
 		gsettings set org.gnome.shell.extensions.forge.keybindings focus-border-toggle "[]"
+		gsettings set org.gnome.shell.extensions.forge.keybindings con-stacked-layout-toggle "[]"
 		gsettings set org.gnome.shell.extensions.forge.keybindings window-toggle-float "[]"
 
 		# Other shortcuts
