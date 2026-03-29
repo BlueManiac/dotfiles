@@ -14,6 +14,9 @@ main() {
 	echo "Installing .NET SDK..."
 	sudo paru -S --needed --noconfirm dotnet-sdk
 
+	echo "Installing Discord..."
+	sudo paru -S --needed --noconfirm discord
+
 	echo "Installing CachyOS gaming meta package..."
 	sudo paru -S --needed --noconfirm cachyos-gaming-meta
 
@@ -188,7 +191,7 @@ EOF
 			com.github.stunkymonkey.nautilus-open-any-terminal \
 			terminal \
 			"alacritty"
-		nautilus -q || true
+		nautilus -q >/dev/null 2>&1 || true
 
 		echo "Setting up Nautilus context menu - Open with Code..."
 		mkdir -p "$HOME/.local/share/nautilus/scripts"
