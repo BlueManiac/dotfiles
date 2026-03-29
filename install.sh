@@ -182,6 +182,14 @@ EOF
 		echo "Setting GNOME text scaling factor..."
 		gsettings set org.gnome.desktop.interface text-scaling-factor 1.03
 
+		echo "Setting up Nautilus context menu - Open Terminal Here..."
+		paru -S --needed --noconfirm nautilus-open-any-terminal
+		gsettings set \
+			com.github.stunkymonkey.nautilus-open-any-terminal \
+			terminal \
+			"alacritty"
+		nautilus -q || true
+
 		echo "Setting up Nautilus context menu - Open with Code..."
 		mkdir -p "$HOME/.local/share/nautilus/scripts"
 		cat > "$HOME/.local/share/nautilus/scripts/Open with Code" << 'EOF'
