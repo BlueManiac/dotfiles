@@ -155,9 +155,9 @@ EOF
 		local kb_schema="org.gnome.settings-daemon.plugins.media-keys.custom-keybinding"
 		local custom_bindings=(
 			"Alacritty|alacritty|<Super>q"
-			"File Manager|nautilus|<Super>e"
-			"VS Code|code|<Super>r"
 			"Brave|brave|<Super>w"
+			"File Manager|nautilus --new-window|<Super>e"
+			"VS Code|code|<Super>r"
 		)
 
 		local kb_list=$(printf "'$kb_path/custom%s/', " "${!custom_bindings[@]}")
