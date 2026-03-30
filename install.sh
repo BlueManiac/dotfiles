@@ -184,6 +184,10 @@ EOF
 		echo "Setting GNOME text scaling factor..."
 		gsettings set org.gnome.desktop.interface text-scaling-factor 1.03
 
+		echo "Configuring Nautilus to sort folders before files..."
+		gsettings set org.gtk.Settings.FileChooser sort-directories-first true
+		gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
+
 		echo "Setting up Nautilus context menu - Open Terminal Here..."
 		paru -S --needed --noconfirm nautilus-open-any-terminal
 		gsettings set \
