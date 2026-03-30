@@ -138,7 +138,6 @@ EOF
 		gsettings set org.gnome.desktop.wm.keybindings close "['<Super>x']"
 		gsettings set org.gnome.shell.extensions.forge.keybindings focus-border-toggle "[]"
 		gsettings set org.gnome.shell.extensions.forge.keybindings con-stacked-layout-toggle "[]"
-		gsettings set org.gnome.shell.extensions.forge.keybindings window-toggle-float "[]"
 
 		# Other shortcuts
 		gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Super>d']"
@@ -157,7 +156,7 @@ EOF
 		local custom_bindings=(
 			"Alacritty|alacritty|<Super>q"
 			"File Manager|nautilus|<Super>e"
-			"VS Code|code|<Super>c"
+			"VS Code|code|<Super>r"
 			"Brave|brave|<Super>w"
 		)
 
