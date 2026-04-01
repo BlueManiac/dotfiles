@@ -4,24 +4,24 @@ main() {
 	# ===== System update =====
 
 	echo "Updating packages..."
-	sudo paru -Syu --noconfirm
+	paru -Syu --noconfirm
 
 	# ===== Applications =====
 	
 	echo "Installing Brave browser..."
-	sudo paru -S --needed --noconfirm brave-bin
+	paru -S --needed --noconfirm brave-bin
 
 	echo "Installing .NET SDK..."
-	sudo paru -S --needed --noconfirm dotnet-sdk
+	paru -S --needed --noconfirm dotnet-sdk
 
 	echo "Installing Discord..."
-	sudo paru -S --needed --noconfirm discord
+	paru -S --needed --noconfirm discord
 
 	echo "Installing CachyOS gaming meta package..."
-	sudo paru -S --needed --noconfirm cachyos-gaming-meta
+	paru -S --needed --noconfirm cachyos-gaming-meta
 
 	echo "Installing Etcher..."
-	sudo paru -S --needed --noconfirm etcher-bin
+	paru -S --needed --noconfirm etcher-bin
 
 	echo "Installing LM Studio..."
 	paru -S --needed --noconfirm lmstudio-bin
@@ -37,20 +37,20 @@ EOF
 	xdg-mime default lmstudio.desktop x-scheme-handler/lmstudio || true
 
 	echo "Installing Node.js..."
-	sudo paru -S --needed --noconfirm nodejs npm
+	paru -S --needed --noconfirm nodejs npm
 
 	echo "Installing Python..."
-	sudo paru -S --needed --noconfirm python
+	paru -S --needed --noconfirm python
 
 	echo "Installing Ollama..."
-	sudo paru -S --needed --noconfirm ollama
+	paru -S --needed --noconfirm ollama
 	sudo systemctl enable --now ollama
 
 	echo "Installing OnlyOffice..."
 	paru -S --needed --noconfirm onlyoffice-bin
 
 	echo "Installing Steam..."
-	sudo paru -S --needed --noconfirm steam
+	paru -S --needed --noconfirm steam
 
 	echo "Installing Visual Studio Code..."
 	paru -S --needed --noconfirm visual-studio-code-bin
@@ -58,7 +58,7 @@ EOF
 	# ===== CLI tooling =====
 
 	echo "Installing uv..."
-	sudo paru -S --needed --noconfirm uv
+	paru -S --needed --noconfirm uv
 
 	# Codex CLI
 	echo "Installing Codex CLI..."
